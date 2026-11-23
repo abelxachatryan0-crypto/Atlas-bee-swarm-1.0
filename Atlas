@@ -1,0 +1,58 @@
+-- Скрипт создаёт на экране белую плашку (Frame) с текстом "Арег лох" для Delta
+-- Предполагается выполнение в клиентском окружении Roblox (LocalScript в StarterGui или выполнение через executor)
+
+-- Получаем PlayerGui текущего игрока
+local player = game:GetService("Players").LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- Удаляем старую плашку, если она уже существует (чтобы не дублировалось)
+local old = playerGui:FindFirstChild("AreghBanner")
+if old then
+    old:Destroy()
+end
+
+-- Создаём ScreenGui — контейнер для элементов интерфейса
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "AreghBanner"
+screenGui.ResetOnSpawn = false          -- не исчезает при респавне
+screenGui.IgnoreGuiInset = true         -- учитывать/не учитывать верхний отступ
+screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGui.Parent = playerGui
+
+-- Создаём белую плашку (Frame)
+local frame = Instance.new("Frame")
+frame.Name = "WhitePlate"
+frame.Size = UDim2.new(0, 400, 0, 100)              -- ширина 400, высота 100 пикселей
+frame.Position = UDim2.new(0.5, -200, 0.5, -50)     -- по центру экрана
+frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)  -- белый цвет
+frame.BackgroundTransparency = 0
+frame.BorderSizePixel = 0
+frame.Parent = screenGui
+
+-- Скругление углов плашки (опционально, для эстетики)
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = frame
+
+-- Обводка плашки (чтобы белая плашка была видна на белом фоне)
+local stroke = Instance.new("UIStroke")
+stroke.Color = Color3.fromRGB(0, 0, 0)
+stroke.Thickness = 2
+stroke.Parent = frame
+
+-- Текст "Арег лох" внутри плашки
+local label = Instance.new("TextLabel")
+label.Name = "AreghText"
+label.Size = UDim2.new(1, 0, 1, 0)                  -- заполняет всю плашку
+label.Position = UDim2.new(0, 0, 0, 0)
+label.BackgroundTransparency = 1                    -- прозрачный фон текста
+label.Text = "Арег лох"
+label.TextColor3 = Color3.fromRGB(0, 0, 0)          -- чёрный текст
+label.TextScaled = false
+label.TextSize = 48
+label.Font = Enum.Font.GothamBold
+label.TextWrapped = true
+label.Parent = frame
+
+-- Автоматическое масштабирование текста под размер плашки
+label.TextScaled = true
